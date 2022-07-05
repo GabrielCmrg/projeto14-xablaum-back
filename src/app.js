@@ -12,5 +12,7 @@ app.get('/', (req, res) => {
     res.send('ta online')
 })
 
+// teste
+
 const PORT = process.env.PORT;
 app.listen(PORT);
