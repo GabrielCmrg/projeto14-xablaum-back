@@ -1,18 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import router from './routers/routes';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-
-app.get('/', (req, res) => {
-    res.send('ta online')
-})
-
-// teste
+app.use(router);
 
 const PORT = process.env.PORT;
 app.listen(PORT);
