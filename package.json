@@ -18,6 +18,7 @@
     "mongodb": "^4.7.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.18.2",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-node": "^4.1.0",
