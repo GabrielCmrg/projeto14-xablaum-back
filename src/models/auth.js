@@ -1,7 +1,6 @@
 import { db } from "./index.js";
-import { stripHtml } from "string-strip-html";
 import joi from "joi";
-
+ 
 export const signUpSchema = joi.object({
     name: joi.string().required().trim(),
     email: joi.string().email().required(),
