@@ -10,5 +10,5 @@ app.use(express.json());
 app.use(cors());
 app.use(router);
 
-const PORT = process.env.PORT;
+const { PORT } = process.env;
 app.listen(PORT);
