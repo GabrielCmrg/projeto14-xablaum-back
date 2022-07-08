@@ -1,4 +1,5 @@
 import { db } from "./index.js";
+import { ObjectId } from "mongodb";
 import joi from "joi";
 
 const users = "users";
@@ -13,12 +14,18 @@ export const createUser = async (user) => {
   await db.collection(users).insertOne(user);
 };
 
-export const getSessionById = async (id) => {
-  const userLogged = await db.collection("sessions").findOne({
+export const getSessionByUserId = async (id) => {
+  const userLogged = await db.collection(sessions).findOne({
     userId: id,
   });
   return userLogged;
 };
+
+export const getSessionById = async (id) => {
+    const userLogged = await db.collection(sessions).findOne({
+        _id: new ObjectId(id)
+    })
+}
 
 export const createSession = async (session) => {
   await db.collection(sessions).insertOne(session);
