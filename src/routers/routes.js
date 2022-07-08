@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { productMiddlewares, testMiddlewares } from '../middlewares/index';
-import { productController, testController } from '../controllers/index';
+import { productMiddlewares, testMiddlewares } from '../middlewares/index.js';
+import { productController, testController } from '../controllers/index.js';
 
 const router = express.Router();
 

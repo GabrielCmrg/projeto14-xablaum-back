@@ -1,4 +1,4 @@
-import { test } from '../models/index';
+import { test } from '../models/index.js';
 
 export const ok = async (req, res) => {
   try {

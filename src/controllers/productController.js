@@ -1,4 +1,4 @@
-import { product } from '../models';
+import { product } from '../models/index.js';
 
 export const registerProduct = async (req, res) => {
   const validProduct = res.locals.product;

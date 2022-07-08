@@ -1,6 +1,6 @@
 import joi from 'joi';
 
-import { db } from './index';
+import { db } from './index.js';
 
 const products = 'products';
 

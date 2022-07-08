@@ -1,2 +1,2 @@
-export * as testController from './testController';
-export * as productController from './productController';
+export * as testController from './testController.js';
+export * as productController from './productController.js';

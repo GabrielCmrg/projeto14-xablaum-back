@@ -1,2 +1,2 @@
-export * as testMiddlewares from './testMiddlewares';
-export * as productMiddlewares from './productMiddlewares';
+export * as testMiddlewares from './testMiddlewares.js';
+export * as productMiddlewares from './productMiddlewares.js';

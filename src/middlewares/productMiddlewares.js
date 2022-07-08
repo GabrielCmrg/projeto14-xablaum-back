@@ -1,4 +1,4 @@
-import { product } from '../models';
+import { product } from '../models/index.js';
 
 export const validateProduct = (req, res, next) => {
   const validation = product.productSchema.validate(req.body);
