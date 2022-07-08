@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { auth } from "../models/index.js";
 
 dotenv.config();
-const expireTime = 24 * 60 * 60;
+const EXPIRE_TIME = 24 * 60 * 60;
 
 export const cadastro = async (req, res) => {
   const { name, email, password } = res.locals.newUser;
