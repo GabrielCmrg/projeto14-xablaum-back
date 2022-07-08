@@ -12,3 +12,4 @@ client.connect().then(() => {
 export { db };
 
 export * as test from './test';
+export * as product from './product';
