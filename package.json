@@ -9,17 +9,22 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js",
+    "dev": "npx nodemon ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "joi": "^17.6.0",
-    "mongodb": "^4.7.0"
+    "mongodb": "^4.7.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.19",
+    "string-strip-html": "^10.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.2",
@@ -31,5 +36,13 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielCmrg/projeto14-xablaum-back.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GabrielCmrg/projeto14-xablaum-back/issues"
+  },
+  "homepage": "https://github.com/GabrielCmrg/projeto14-xablaum-back#readme"
 }

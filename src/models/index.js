@@ -12,3 +12,4 @@ client.connect().then(() => {
 export { db };
 
 export * as product from './product.js';
+export * as auth from './auth.js';
