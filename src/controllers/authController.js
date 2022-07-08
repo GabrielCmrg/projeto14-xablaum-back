@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import { auth } from "../models/index.js";
+import { auth } from '../models/index.js';
 
 dotenv.config();
 const EXPIRE_TIME = 24 * 60 * 60;
@@ -14,52 +14,55 @@ export const cadastro = async (req, res) => {
 
   try {
     const emailAlreadyExist = await auth.getUserByEmail(email);
-    if (emailAlreadyExist) return res.status(409).send("E-mail já existe!");
+    if (emailAlreadyExist) return res.status(409).send('E-mail já existe!');
 
     const user = { name, email, password: passwordCrypt };
     await auth.createUser(user);
 
-    res.status(201).send("OK");
+    return res.status(201).send('OK');
   } catch (error) {
-    res.status(500).send(error);
+    console.error(error);
+    return res.status(500).send(error);
   }
 };
 
 export const login = async (req, res) => {
-  const { _id } = res.locals.newSession;
+  const { _id: userId } = res.locals.newSession;
   const secretKey = process.env.JWT_SECRET;
 
   try {
-    const userLogged = await auth.getSessionByUserId(_id);
+    const userLogged = await auth.getSessionByUserId(userId);
 
     if (userLogged) {
       try {
         const { sessionId } = jwt.verify(userLogged.token, secretKey);
 
-        const sessionExists = await auth.getSessionById(sessionId)
+        const sessionExists = await auth.getSessionById(sessionId);
 
-        if(sessionExists.userId !== _id) {
-            throw 'token não condiz com usuário'
-        } 
+        if (sessionExists.userId !== userId) {
+          throw new Error('token não condiz com usuário');
+        }
 
         res.status(200).send(userLogged.token);
       } catch (error) {
-        await auth.deleteSession(userLogged._id);
-        res.status(401).send("Session finished");
+        const { _id: sessionId } = userLogged;
+        await auth.deleteSession(sessionId);
+        res.status(401).send('Session finished');
       }
     } else if (!userLogged) {
       const session = {
-        userId: _id,
+        userId,
       };
       await auth.createSession(session);
 
-      const userSession = await auth.getSessionByUserId(_id);
+      const userSession = await auth.getSessionByUserId(userId);
 
-      const data = { sessionId: userSession._id };
+      const { _id: sessionId } = userSession;
+      const data = { sessionId };
       const expire = { expiresIn: EXPIRE_TIME };
       const token = jwt.sign(data, secretKey, expire);
 
-      await auth.addTokenInSession(_id, token);
+      await auth.addTokenInSession(userId, token);
 
       res.status(200).send(token);
     }

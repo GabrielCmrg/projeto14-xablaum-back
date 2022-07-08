@@ -1,9 +1,10 @@
-import { db } from "./index.js";
-import { ObjectId } from "mongodb";
-import joi from "joi";
+import { ObjectId } from 'mongodb';
+import joi from 'joi';
 
-const users = "users";
-const sessions = "sessions";
+import { db } from './index.js';
+
+const users = 'users';
+const sessions = 'sessions';
 
 export const getUserByEmail = async (email) => {
   const user = await db.collection(users).findOne({ email });
@@ -22,10 +23,11 @@ export const getSessionByUserId = async (id) => {
 };
 
 export const getSessionById = async (id) => {
-    const userLogged = await db.collection(sessions).findOne({
-        _id: new ObjectId(id)
-    })
-}
+  const userLogged = await db.collection(sessions).findOne({
+    _id: new ObjectId(id),
+  });
+  return userLogged;
+};
 
 export const createSession = async (session) => {
   await db.collection(sessions).insertOne(session);
@@ -34,10 +36,10 @@ export const createSession = async (session) => {
 export const addTokenInSession = async (userId, token) => {
   await db.collection(sessions).updateOne(
     {
-      userId: userId,
+      userId,
     },
     {
-      $set: { token: token },
+      $set: { token },
     }
   );
 };
@@ -52,7 +54,7 @@ export const signUpSchema = joi.object({
   name: joi.string().required().trim(),
   email: joi.string().email().required(),
   password: joi.string().required(),
-  confirmPassword: joi.string().equal(joi.ref("password")),
+  confirmPassword: joi.string().equal(joi.ref('password')),
 });
 
 export const loginSchema = joi.object({

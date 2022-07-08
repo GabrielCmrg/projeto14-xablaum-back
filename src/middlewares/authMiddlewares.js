@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import { stripHtml } from "string-strip-html";
+import bcrypt from 'bcrypt';
+import { stripHtml } from 'string-strip-html';
 
-import { auth } from "../models/index.js";
+import { auth } from '../models/index.js';
 
 export const validateSignUp = (req, res, next) => {
   const validationBefore = auth.signUpSchema.validate(req.body);
@@ -19,12 +19,13 @@ export const validateSignUp = (req, res, next) => {
   res.locals.newUser = newUser;
 
   next();
+  return true;
 };
 
 export const validateLogin = (req, res, next) => {
   const validationBefore = auth.loginSchema.validate(req.body);
   if (validationBefore.error)
-    return res.status(422).send("Some error with JSON body");
+    return res.status(422).send('Some error with JSON body');
 
   const newSession = {
     email: stripHtml(req.body.email).result,
@@ -32,12 +33,13 @@ export const validateLogin = (req, res, next) => {
   };
 
   const validationAfter = auth.loginSchema.validate(newSession);
-  if (validationBefore.error)
-    return res.status(422).send("Some error with JSON body envolving HTML tag");
+  if (validationAfter.error)
+    return res.status(422).send('Some error with JSON body envolving HTML tag');
 
   res.locals.newSession = newSession;
 
   next();
+  return true;
 };
 
 export const checkUserLogin = async (req, res, next) => {
@@ -49,12 +51,13 @@ export const checkUserLogin = async (req, res, next) => {
     const emailOrPasswordWrong =
       !user || !bcrypt.compareSync(password, user.password);
     if (emailOrPasswordWrong)
-      return res.status(401).send("Email ou senha errados!");
+      return res.status(401).send('Email ou senha errados!');
 
     res.locals.newSession = user;
 
     next();
+    return true;
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 };
