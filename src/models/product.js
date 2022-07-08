@@ -5,11 +5,11 @@ import { db } from './index.js';
 const products = 'products';
 
 export const productSchema = joi.object({
-  name: joi.string().required(),
+  name: joi.string().trim().required(),
   oldPrice: joi.number().required(),
   newPrice: joi.number().required(),
-  image: joi.string().uri().required(),
-  description: joi.string().required(),
+  image: joi.string().uri().trim().required(),
+  description: joi.string().trim().required(),
 });
 
 export const createProduct = async function (product) {
