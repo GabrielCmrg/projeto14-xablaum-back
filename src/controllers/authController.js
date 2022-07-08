@@ -30,11 +30,18 @@ export const login = async (req, res) => {
   const secretKey = process.env.JWT_SECRET;
 
   try {
-    const userLogged = await auth.getSessionById(_id);
+    const userLogged = await auth.getSessionByUserId(_id);
 
     if (userLogged) {
       try {
         const { sessionId } = jwt.verify(userLogged.token, secretKey);
+
+        const sessionExists = await auth.getSessionById(sessionId)
+
+        if(sessionExists.userId !== _id) {
+            throw 'token não condiz com usuário'
+        } 
+
         res.status(200).send(userLogged.token);
       } catch (error) {
         await auth.deleteSession(userLogged._id);
@@ -43,14 +50,13 @@ export const login = async (req, res) => {
     } else if (!userLogged) {
       const session = {
         userId: _id,
-        token: "",
       };
       await auth.createSession(session);
 
-      const userSession = await auth.getSessionById(_id);
+      const userSession = await auth.getSessionByUserId(_id);
 
       const data = { sessionId: userSession._id };
-      const expire = { expiresIn: expireTime };
+      const expire = { expiresIn: EXPIRE_TIME };
       const token = jwt.sign(data, secretKey, expire);
 
       await auth.addTokenInSession(_id, token);
