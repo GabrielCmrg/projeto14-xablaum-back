@@ -15,5 +15,6 @@ export const validateSignUp = (req, res, next) => {
     if(validationAfter.error) return res.sendStatus(422)
 
     res.locals.newUser = newUser;
+    
     next();
 }

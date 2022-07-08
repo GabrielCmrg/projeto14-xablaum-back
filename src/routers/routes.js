@@ -8,7 +8,7 @@ import { testController } from '../controllers/index.js';
 
 const router = express.Router();
 
-router.post('/sign-up', authMiddlewares.validateSignUp, authController.login)
+router.post('/sign-up', authMiddlewares.validateSignUp, authController.cadastro)
 router.post('/login')
 
 router.get('/', testMiddlewares.validation, testController.ok);
