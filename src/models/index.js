@@ -10,5 +10,6 @@ client.connect().then(() => {
 });
 
 export * as test from './test.js';
+export * as auth from './auth.js';
 
 export { db };
