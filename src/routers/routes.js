@@ -1,11 +1,9 @@
 import express from 'express';
 
-import { productMiddlewares, testMiddlewares } from '../middlewares/index.js';
-import { productController, testController } from '../controllers/index.js';
+import { productMiddlewares } from '../middlewares/index.js';
+import { productController } from '../controllers/index.js';
 
 const router = express.Router();
-
-router.get('/', testMiddlewares.validation, testController.ok);
 
 router.post(
   '/create-new-product',

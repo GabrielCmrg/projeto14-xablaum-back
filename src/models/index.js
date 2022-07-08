@@ -11,5 +11,4 @@ client.connect().then(() => {
 
 export { db };
 
-export * as test from './test.js';
 export * as product from './product.js';
