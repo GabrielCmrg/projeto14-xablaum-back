@@ -5,7 +5,8 @@ import { auth } from '../models/index.js';
 
 export const validateSignUp = (req, res, next) => {
   const validationBefore = auth.signUpSchema.validate(req.body);
-  if (validationBefore.error) return res.sendStatus(422);
+  if (validationBefore.error)
+    return res.status(422).send('Some error with JSON body');
 
   const newUser = {
     name: stripHtml(validationBefore.value.name).result,
@@ -15,7 +16,8 @@ export const validateSignUp = (req, res, next) => {
   };
 
   const validationAfter = auth.signUpSchema.validate(newUser);
-  if (validationAfter.error) return res.sendStatus(422);
+  if (validationAfter.error)
+    return res.status(422).send('Some error with JSON body envolving HTML tag');
 
   res.locals.newUser = newUser;
 
@@ -29,8 +31,8 @@ export const validateLogin = (req, res, next) => {
     return res.status(422).send('Some error with JSON body');
 
   const newSession = {
-    email: stripHtml(req.body.email).result,
-    password: req.body.password,
+    email: stripHtml(validationBefore.value.email).result,
+    password: validationBefore.value.password,
   };
 
   const validationAfter = auth.loginSchema.validate(newSession);
