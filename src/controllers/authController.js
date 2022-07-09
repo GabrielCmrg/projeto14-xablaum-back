@@ -54,11 +54,11 @@ export const login = async (req, res) => {
       } catch (error) {
         const { _id: sessionId } = existingUserSession;
         await auth.deleteSession(sessionId);
-        const token = createUserSession(userId, secretKey);
+        const token = await createUserSession(userId, secretKey);
         return res.status(200).send(token);
       }
     } else {
-      const token = createUserSession(userId, secretKey);
+      const token = await createUserSession(userId, secretKey);
       return res.status(200).send(token);
     }
   } catch (error) {
