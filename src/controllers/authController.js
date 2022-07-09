@@ -7,7 +7,7 @@ import { auth } from '../models/index.js';
 dotenv.config();
 const EXPIRE_TIME = 24 * 60 * 60;
 
-export const cadastro = async (req, res) => {
+export const signup = async (req, res) => {
   const { name, email, password } = res.locals.newUser;
 
   const passwordCrypt = bcrypt.hashSync(password, 10);

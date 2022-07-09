@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 
 import { productMiddlewares, authMiddlewares } from '../middlewares/index.js';
 import { productController, authController } from '../controllers/index.js';
@@ -13,14 +13,10 @@ router.post(
 );
 
 // authentication routes
-router.post(
-  "/sign-up",
-  authMiddlewares.validateSignUp,
-  authController.cadastro
-);
+router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
 
 router.post(
-  "/login",
+  '/login',
   authMiddlewares.validateLogin,
   authMiddlewares.checkUserLogin,
   authController.login
