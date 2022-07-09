@@ -30,23 +30,23 @@ export const validateLogin = (req, res, next) => {
   if (validationBefore.error)
     return res.status(422).send('Some error with JSON body');
 
-  const newSession = {
+  const credentials = {
     email: stripHtml(validationBefore.value.email).result,
     password: validationBefore.value.password,
   };
 
-  const validationAfter = auth.loginSchema.validate(newSession);
+  const validationAfter = auth.loginSchema.validate(credentials);
   if (validationAfter.error)
     return res.status(422).send('Some error with JSON body envolving HTML tag');
 
-  res.locals.newSession = newSession;
+  res.locals.credentials = validationAfter.value;
 
   next();
   return true;
 };
 
 export const checkUserLogin = async (req, res, next) => {
-  const { email, password } = res.locals.newSession;
+  const { email, password } = res.locals.credentials;
 
   try {
     const user = await auth.getUserByEmail(email);
@@ -54,13 +54,14 @@ export const checkUserLogin = async (req, res, next) => {
     const emailOrPasswordWrong =
       !user || !bcrypt.compareSync(password, user.password);
     if (emailOrPasswordWrong)
-      return res.status(401).send('Email ou senha errados!');
+      return res.status(401).send('Email ou senha incorretos!');
 
-    res.locals.newSession = user;
+    res.locals.user = user;
 
     next();
     return true;
   } catch (error) {
+    console.error(error);
     return res.status(500).send(error);
   }
 };
