@@ -7,6 +7,20 @@ import { auth } from '../models/index.js';
 dotenv.config();
 const EXPIRE_TIME = 24 * 60 * 60;
 
+const createUserSession = async (userId, secretKey) => {
+  const session = {
+    userId,
+  };
+  const sessionId = await auth.createSession(session);
+
+  const data = { sessionId };
+  const expire = { expiresIn: EXPIRE_TIME };
+  const token = jwt.sign(data, secretKey, expire);
+  await auth.addTokenInSession(userId, token);
+
+  return token;
+};
+
 export const signup = async (req, res) => {
   const { name, email, password } = res.locals.newUser;
 
@@ -27,46 +41,28 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { _id: userId } = res.locals.newSession;
+  const { _id: userId } = res.locals.user;
   const secretKey = process.env.JWT_SECRET;
 
   try {
-    const userLogged = await auth.getSessionByUserId(userId);
+    const existingUserSession = await auth.getSessionByUserId(userId);
 
-    if (userLogged) {
+    if (existingUserSession) {
       try {
-        const { sessionId } = jwt.verify(userLogged.token, secretKey);
-
-        const sessionExists = await auth.getSessionById(sessionId);
-
-        if (sessionExists.userId !== userId) {
-          throw new Error('token não condiz com usuário');
-        }
-
-        res.status(200).send(userLogged.token);
+        jwt.verify(existingUserSession.token, secretKey);
+        return res.status(200).send(existingUserSession.token);
       } catch (error) {
-        const { _id: sessionId } = userLogged;
+        const { _id: sessionId } = existingUserSession;
         await auth.deleteSession(sessionId);
-        res.status(401).send('Session finished');
+        const token = createUserSession(userId, secretKey);
+        return res.status(200).send(token);
       }
-    } else if (!userLogged) {
-      const session = {
-        userId,
-      };
-      await auth.createSession(session);
-
-      const userSession = await auth.getSessionByUserId(userId);
-
-      const { _id: sessionId } = userSession;
-      const data = { sessionId };
-      const expire = { expiresIn: EXPIRE_TIME };
-      const token = jwt.sign(data, secretKey, expire);
-
-      await auth.addTokenInSession(userId, token);
-
-      res.status(200).send(token);
+    } else {
+      const token = createUserSession(userId, secretKey);
+      return res.status(200).send(token);
     }
   } catch (error) {
-    res.status(500).send(error);
+    console.error(error);
+    return res.status(500).send(error);
   }
 };
