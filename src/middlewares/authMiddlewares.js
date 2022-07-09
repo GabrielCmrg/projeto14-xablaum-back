@@ -8,9 +8,10 @@ export const validateSignUp = (req, res, next) => {
   if (validationBefore.error) return res.sendStatus(422);
 
   const newUser = {
-    name: stripHtml(req.body.name).result,
-    email: stripHtml(req.body.email).result,
-    password: req.body.password,
+    name: stripHtml(validationBefore.value.name).result,
+    email: stripHtml(validationBefore.value.email).result,
+    password: validationBefore.value.password,
+    confirmPassword: validationBefore.value.confirmPassword,
   };
 
   const validationAfter = auth.signUpSchema.validate(newUser);

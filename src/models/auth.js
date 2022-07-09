@@ -52,12 +52,12 @@ export const deleteSession = async (sessionId) => {
 
 export const signUpSchema = joi.object({
   name: joi.string().required().trim(),
-  email: joi.string().email().required(),
-  password: joi.string().required(),
-  confirmPassword: joi.string().equal(joi.ref('password')),
+  email: joi.string().email().trim().required(),
+  password: joi.string().trim().required(),
+  confirmPassword: joi.string().trim().equal(joi.ref('password')).required(),
 });
 
 export const loginSchema = joi.object({
-  email: joi.string().email().required(),
-  password: joi.string().required(),
+  email: joi.string().email().trim().required(),
+  password: joi.string().trim().required(),
 });
