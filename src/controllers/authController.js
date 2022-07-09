@@ -1,69 +1,68 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import { auth } from "../models/index.js";
+import { auth } from '../models/index.js';
 
 dotenv.config();
 const EXPIRE_TIME = 24 * 60 * 60;
 
-export const cadastro = async (req, res) => {
+const createUserSession = async (userId, secretKey) => {
+  const session = {
+    userId,
+  };
+  const sessionId = await auth.createSession(session);
+
+  const data = { sessionId };
+  const expire = { expiresIn: EXPIRE_TIME };
+  const token = jwt.sign(data, secretKey, expire);
+  await auth.addTokenInSession(userId, token);
+
+  return token;
+};
+
+export const signup = async (req, res) => {
   const { name, email, password } = res.locals.newUser;
 
   const passwordCrypt = bcrypt.hashSync(password, 10);
 
   try {
     const emailAlreadyExist = await auth.getUserByEmail(email);
-    if (emailAlreadyExist) return res.status(409).send("E-mail já existe!");
+    if (emailAlreadyExist) return res.status(409).send('E-mail já existe!');
 
     const user = { name, email, password: passwordCrypt };
     await auth.createUser(user);
 
-    res.status(201).send("OK");
+    return res.status(201).send('OK');
   } catch (error) {
-    res.status(500).send(error);
+    console.error(error);
+    return res.status(500).send(error);
   }
 };
 
 export const login = async (req, res) => {
-  const { _id } = res.locals.newSession;
+  const { _id: userId } = res.locals.user;
   const secretKey = process.env.JWT_SECRET;
 
   try {
-    const userLogged = await auth.getSessionByUserId(_id);
+    const existingUserSession = await auth.getSessionByUserId(userId);
 
-    if (userLogged) {
+    if (existingUserSession) {
       try {
-        const { sessionId } = jwt.verify(userLogged.token, secretKey);
-
-        const sessionExists = await auth.getSessionById(sessionId)
-
-        if(sessionExists.userId !== _id) {
-            throw 'token não condiz com usuário'
-        } 
-
-        res.status(200).send(userLogged.token);
+        jwt.verify(existingUserSession.token, secretKey);
+        return res.status(200).send(existingUserSession.token);
       } catch (error) {
-        await auth.deleteSession(userLogged._id);
-        res.status(401).send("Session finished");
+        const { _id: sessionId } = existingUserSession;
+        await auth.deleteSession(sessionId);
+        const token = await createUserSession(userId, secretKey);
+        return res.status(200).send(token);
       }
-    } else if (!userLogged) {
-      const session = {
-        userId: _id,
-      };
-      await auth.createSession(session);
-
-      const userSession = await auth.getSessionByUserId(_id);
-
-      const data = { sessionId: userSession._id };
-      const expire = { expiresIn: EXPIRE_TIME };
-      const token = jwt.sign(data, secretKey, expire);
-
-      await auth.addTokenInSession(_id, token);
-
-      res.status(200).send(token);
+    } else {
+      const token = await createUserSession(userId, secretKey);
+      return res.status(200).send(token);
     }
   } catch (error) {
-    res.status(500).send(error);
+    console.error(error);
+    return res.status(500).send(error);
   }
 };

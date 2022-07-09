@@ -9,7 +9,7 @@ client.connect().then(() => {
   db = client.db(process.env.DB_NAME);
 });
 
-export * as test from './test.js';
-export * as auth from './auth.js';
-
 export { db };
+
+export * as product from './product.js';
+export * as auth from './auth.js';

@@ -1,26 +1,25 @@
-import express from "express";
+import express from 'express';
 
-import { authMiddlewares } from "../middlewares/index.js";
-import { authController } from "../controllers/index.js";
-
-import { testMiddlewares } from "../middlewares/index.js";
-import { testController } from "../controllers/index.js";
+import { productMiddlewares, authMiddlewares } from '../middlewares/index.js';
+import { productController, authController } from '../controllers/index.js';
 
 const router = express.Router();
 
+// product routes
 router.post(
-  "/sign-up",
-  authMiddlewares.validateSignUp,
-  authController.cadastro
+  '/create-new-product',
+  productMiddlewares.validateProduct,
+  productController.registerProduct
 );
 
+// authentication routes
+router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
+
 router.post(
-  "/login",
+  '/login',
   authMiddlewares.validateLogin,
   authMiddlewares.checkUserLogin,
   authController.login
 );
-
-router.get("/", testMiddlewares.validation, testController.ok);
 
 export default router;
