@@ -77,3 +77,28 @@ You can create a new product and insert it on database by making a POST request 
 ```
 
 If everything is ok, it will return status code 201. If any key is improperly passed it will return status code 422. If anything breaks internally it will return status code 500.
+
+#### Get promo products
+
+You can get all products that have any discount making a GET request to `/promo-products`. If anything go wrong internally server responds with status code 500, otherwise responds with an array of objects like
+
+```js
+[
+  {
+    name, // string
+    oldPrice, // number
+    newPrice, // number
+    image, // string with URI format
+    description, // string
+    views, // number integer
+    purchases, // number integer
+  },
+  {
+    name...
+  }
+]
+```
+
+#### Get viewed/purchased products
+
+You can get all products making a GET request to `/viewed-products` or `/purchased-products`. If anything go wrong internally server responds with status code 500, otherwise responds with an array of objects like the one on the previous section. The difference between them is that these two routes always return all products on database, and they are sorted by views or purchases respectively.
