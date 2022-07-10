@@ -15,3 +15,9 @@ export const productSchema = joi.object({
 export const createProduct = async function (product) {
   await db.collection(products).insertOne(product);
 };
+
+export const getProducts = async function () {
+  const allProducts = await db.collection(products).find({}).toArray();
+
+  return allProducts;
+};
