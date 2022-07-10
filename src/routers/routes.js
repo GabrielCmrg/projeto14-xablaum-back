@@ -12,6 +12,8 @@ router.post(
   productController.registerProduct
 );
 
+router.get('/promo-products', productController.getPromoProducts);
+
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
 

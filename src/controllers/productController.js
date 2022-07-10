@@ -13,3 +13,13 @@ export const registerProduct = async (req, res) => {
       .send('Algo deu errado ao cadastrar o produto na base de dados.');
   }
 };
+
+export const getPromoProducts = async (req, res) => {
+  try {
+    const products = await product.getProductsWithDiscount();
+    return res.json(products);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Algo deu errado ao tentar buscar os produtos');
+  }
+};
