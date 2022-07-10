@@ -16,11 +16,8 @@ export const createProduct = async function (product) {
   await db.collection(products).insertOne(product);
 };
 
-export const getProductsWithDiscount = async function () {
+export const getProducts = async function () {
   const allProducts = await db.collection(products).find({}).toArray();
-  const promos = allProducts.filter(
-    (product) => product.newPrice < product.oldPrice
-  );
 
-  return promos;
+  return allProducts;
 };
