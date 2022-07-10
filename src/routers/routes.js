@@ -14,6 +14,10 @@ router.post(
 
 router.get('/promo-products', productController.getPromoProducts);
 
+router.get('/viewed-products', productController.getMostViewedProducts);
+
+router.get('/purchased-products', productController.getMostPurchasedProducts);
+
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
 
