@@ -40,3 +40,19 @@ export const getMostViewedProducts = async (req, res) => {
     return res.status(500).send('Algo deu errado ao tentar buscar os produtos');
   }
 };
+
+export const getMostPurchasedProducts = async (req, res) => {
+  try {
+    const products = await product.getProducts();
+    const mostPurchased = [...products];
+    mostPurchased.sort((a, b) => {
+      if (a.purchases < b.purchases) return -1;
+      if (b.purchases < a.purchases) return 1;
+      return 0;
+    });
+    return res.json(mostPurchased);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Algo deu errado ao tentar buscar os produtos');
+  }
+};
