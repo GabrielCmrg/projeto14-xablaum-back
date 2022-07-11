@@ -8,8 +8,8 @@ export const getCartById = async function (id) {
   return cart;
 };
 
-export const deleteCartById = async function (id) {
-  const cart = await db.collection(carts).deleteOne({ _id: new ObjectId(id) });
+export const deleteCartByuserId = async function (id) {
+  const cart = await db.collection(carts).deleteOne({ userId: id });
   return cart;
 };
 
