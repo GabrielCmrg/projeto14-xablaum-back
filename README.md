@@ -124,6 +124,7 @@ You can get all products on cart from a user making a GET request to `/cart` wit
       oldPrice, // number
       newPrice, // number
       image, // URI string
+      qtd, // numer integer
     },
     {
       ...
