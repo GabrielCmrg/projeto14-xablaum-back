@@ -94,3 +94,16 @@ export const checkToken = async (req, res, next) => {
     return res.status(401).send('O token enviado não é válido.');
   }
 };
+
+export const validateToken = (req, res, next) => {
+  const headerValidation = auth.headerSchema.validate(req.headers);
+  if (headerValidation.error) {
+    return res.sendStatus(422);
+  }
+  res.locals.token = headerValidation.value.authorization.replace(
+    'Bearer ',
+    ''
+  );
+  next();
+  return true;
+};

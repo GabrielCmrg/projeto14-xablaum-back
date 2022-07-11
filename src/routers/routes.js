@@ -1,10 +1,6 @@
 import express from 'express';
 
-import {
-  productMiddlewares,
-  authMiddlewares,
-  cartMiddlewares,
-} from '../middlewares/index.js';
+import { productMiddlewares, authMiddlewares } from '../middlewares/index.js';
 import {
   productController,
   authController,
@@ -27,11 +23,13 @@ router.get('/product/:productId', productController.getProductInfo);
 // cart routes
 router.post(
   '/cart',
-  cartMiddlewares.validateRequest,
+  authMiddlewares.validateToken,
+  productMiddlewares.validateProduct,
   authMiddlewares.checkToken,
   productMiddlewares.checkProduct,
   cartController.addToCart
 );
+router.get('/cart', authMiddlewares.validateToken, authMiddlewares.checkToken);
 
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);

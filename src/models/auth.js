@@ -66,7 +66,7 @@ export const headerSchema = joi
   .object({
     authorization: joi
       .string()
-      .pattern(/^[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.?[a-zA-Z0-9_-.+/=]*$/)
+      .pattern(/^Bearer [a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.?[a-zA-Z0-9_-.+/=]*$/)
       .required(),
   })
   .unknown(true);
