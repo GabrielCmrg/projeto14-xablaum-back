@@ -9,7 +9,7 @@ export const getCartById = async function (id) {
 }
 
 export const deleteCartByuserId = async function (id) {
-  const cart = await db.collection(carts).deleteOne({userId: id})
+  const cart = await db.collection(carts).deleteOne({userId: new ObjectId(id)})
   return cart;
 }
 
