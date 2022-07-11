@@ -107,4 +107,27 @@ You can get all products making a GET request to `/viewed-products` or `/purchas
 
 #### Add to cart
 
-You can add products to cart by making a POST request to `/cart` with a Authentication header with `Bearer token` and a product on body with the same keys as in the creation route. It responds with status code 401 if the token is invalid, 404 if the session or product is not found, 422 if you send incorrect keys, 500 if anything break internally or 201 if everything goes right.
+You can add products to cart by making a POST request to `/cart` with a Authentication header with `Bearer token` and a product on body with the same keys as in the creation route. It responds with status code 401 if the token is invalid, 404 if the product is not found, 422 if you send incorrect keys, 500 if anything break internally or 201 if everything goes right.
+
+### Get cart
+
+You can get all products on cart from a user making a GET request to `/cart` with Authentication header with `Bearer token`. It will repond with 401 if token is invalid, 404 if there are no carts for this user, 422 if header is wrong and 500 if anything breaks internally. If erverything is good it will respond with a object like
+
+```js
+{
+  _id: // hash
+  iserId, // id related to user
+  products: [
+    {
+      _id, // hash
+      name, // string
+      oldPrice, // number
+      newPrice, // number
+      image, // URI string
+    },
+    {
+      ...
+    }
+  ],
+}
+```
