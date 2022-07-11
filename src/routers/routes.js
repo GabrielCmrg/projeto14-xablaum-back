@@ -19,6 +19,7 @@ router.get('/promo-products', productController.getPromoProducts);
 router.get('/viewed-products', productController.getMostViewedProducts);
 router.get('/purchased-products', productController.getMostPurchasedProducts);
 router.get('/product/:productId', productController.getProductInfo);
+router.post('/product/:productId', productController.increaseViews);
 
 // cart routes
 router.post(

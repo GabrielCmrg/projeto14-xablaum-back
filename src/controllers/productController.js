@@ -70,3 +70,17 @@ export const getProductInfo = async (req, res) => {
     return res.status(500).send('Algo deu errado ao tentar buscar o produto');
   }
 };
+
+export const increaseViews = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const changed = await product.incrementViews(productId);
+    if (!changed) {
+      return res.status(404).send('Produto não encontrado.');
+    }
+    return res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Algo deu errado ao acessar o produto.');
+  }
+};
