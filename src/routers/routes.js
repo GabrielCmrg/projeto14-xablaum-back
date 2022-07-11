@@ -18,6 +18,8 @@ router.get('/viewed-products', productController.getMostViewedProducts);
 
 router.get('/purchased-products', productController.getMostPurchasedProducts);
 
+router.get('/product/:productId', productController.getProductInfo);
+
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
 
