@@ -1,4 +1,5 @@
 import joi from 'joi';
+import { ObjectId } from 'mongodb';
 
 import { db } from './index.js';
 
@@ -23,7 +24,7 @@ export const getSessionByUserId = async (id) => {
 
 export const getSessionById = async (id) => {
   const userLogged = await db.collection(sessions).findOne({
-    _id: id,
+    _id: new ObjectId(id),
   });
   return userLogged;
 };
