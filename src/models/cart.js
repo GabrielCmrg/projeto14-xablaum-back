@@ -27,6 +27,6 @@ export const updateCart = async function (cart, product) {
   } else {
     await db
       .collection(carts)
-      .updateOne(cart, { $push: { products: product } });
+      .updateOne(cart, { $push: { products: { ...product, qtd: 1 } } });
   }
 };
