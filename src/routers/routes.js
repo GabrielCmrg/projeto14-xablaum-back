@@ -31,7 +31,12 @@ router.post(
   productMiddlewares.checkProduct,
   cartController.addToCart
 );
-router.get('/cart', authMiddlewares.validateToken, authMiddlewares.checkToken);
+router.get(
+  '/cart',
+  authMiddlewares.validateToken,
+  authMiddlewares.checkToken,
+  cartController.getCart
+);
 
 // checkout routes
 router.delete(
