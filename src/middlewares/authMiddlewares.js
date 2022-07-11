@@ -77,7 +77,7 @@ export const checkToken = async (req, res, next) => {
     try {
       const session = await auth.getSessionById(sessionId);
       if (!session) {
-        return res.status(404).send('Sessão não encontrada.');
+        return res.status(401).send('Sessão não encontrada.');
       }
       const { userId } = session;
       res.locals.userId = userId;
