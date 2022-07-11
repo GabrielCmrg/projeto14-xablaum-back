@@ -5,7 +5,11 @@ import {
   authMiddlewares,
   cartMiddlewares,
 } from '../middlewares/index.js';
-import { productController, authController } from '../controllers/index.js';
+import {
+  productController,
+  authController,
+  cartController,
+} from '../controllers/index.js';
 
 const router = express.Router();
 
@@ -25,7 +29,8 @@ router.post(
   '/cart',
   cartMiddlewares.validateRequest,
   authMiddlewares.checkToken,
-  productMiddlewares.checkProduct
+  productMiddlewares.checkProduct,
+  cartController.addToCart
 );
 
 // authentication routes
