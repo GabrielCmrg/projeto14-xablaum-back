@@ -9,7 +9,9 @@ export const getCartById = async function (id) {
 };
 
 export const deleteCartByuserId = async function (id) {
-  const cart = await db.collection(carts).deleteOne({userId: new ObjectId(id)})
+  const cart = await db
+    .collection(carts)
+    .deleteOne({ userId: new ObjectId(id) });
   return cart;
 };
 
@@ -23,7 +25,7 @@ export const createCart = async function (cartDocument) {
 };
 
 export const updateCart = async function (cart, product) {
-  const cartFromDb = db.collection(carts).findOne(cart);
+  const cartFromDb = await db.collection(carts).findOne(cart);
   const idsOnCart = cartFromDb.products.map((p) => {
     const { _id: pId } = p;
     return pId;
