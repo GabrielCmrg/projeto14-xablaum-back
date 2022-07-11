@@ -21,6 +21,13 @@ export const getSessionByUserId = async (id) => {
   return userLogged;
 };
 
+export const getSessionById = async (id) => {
+  const userLogged = await db.collection(sessions).findOne({
+    _id: id,
+  });
+  return userLogged;
+};
+
 export const createSession = async (session) => {
   const { insertedId } = await db.collection(sessions).insertOne(session);
   return insertedId;

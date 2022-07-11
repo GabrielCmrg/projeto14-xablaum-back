@@ -21,7 +21,11 @@ router.get('/purchased-products', productController.getMostPurchasedProducts);
 router.get('/product/:productId', productController.getProductInfo);
 
 // cart routes
-router.post('/cart', cartMiddlewares.validateRequest);
+router.post(
+  '/cart',
+  cartMiddlewares.validateRequest,
+  authMiddlewares.checkToken
+);
 
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
