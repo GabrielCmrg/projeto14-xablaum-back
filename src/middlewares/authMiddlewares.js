@@ -1,7 +1,11 @@
 import bcrypt from 'bcrypt';
 import { stripHtml } from 'string-strip-html';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 import { auth } from '../models/index.js';
+
+dotenv.config();
 
 export const validateSignUp = (req, res, next) => {
   const validationBefore = auth.signUpSchema.validate(req.body);
@@ -64,4 +68,42 @@ export const checkUserLogin = async (req, res, next) => {
     console.error(error);
     return res.status(500).send(error);
   }
+};
+
+export const checkToken = async (req, res, next) => {
+  const { token } = res.locals;
+  try {
+    const { sessionId } = jwt.verify(token, process.env.JWT_SECRET);
+    try {
+      const session = await auth.getSessionById(sessionId);
+      if (!session) {
+        return res.status(401).send('Sessão não encontrada.');
+      }
+      const { userId } = session;
+      res.locals.userId = userId;
+      next();
+      return true;
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .send('Algo deu errado ao buscar a sessão na base de dados.');
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send('O token enviado não é válido.');
+  }
+};
+
+export const validateToken = (req, res, next) => {
+  const headerValidation = auth.headerSchema.validate(req.headers);
+  if (headerValidation.error) {
+    return res.sendStatus(422);
+  }
+  res.locals.token = headerValidation.value.authorization.replace(
+    'Bearer ',
+    ''
+  );
+  next();
+  return true;
 };

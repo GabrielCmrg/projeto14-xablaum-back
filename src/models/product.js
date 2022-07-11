@@ -28,3 +28,15 @@ export const getProductById = async function (id) {
   const productInfo = await db.collection(products).findOne({ _id: productId });
   return productInfo;
 };
+
+export const getProduct = async function (product) {
+  const productFromDb = await db.collection(products).findOne(product);
+  return productFromDb;
+};
+
+export const incrementViews = async function (productId) {
+  const { matchedCount } = await db
+    .collection(products)
+    .updateOne({ _id: productId }, { $inc: { views: 1 } });
+  return matchedCount;
+};

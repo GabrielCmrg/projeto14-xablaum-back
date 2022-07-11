@@ -1,7 +1,11 @@
 import express from 'express';
 
 import { productMiddlewares, authMiddlewares } from '../middlewares/index.js';
-import { productController, authController } from '../controllers/index.js';
+import {
+  productController,
+  authController,
+  cartController,
+} from '../controllers/index.js';
 
 const router = express.Router();
 
@@ -11,18 +15,25 @@ router.post(
   productMiddlewares.validateProduct,
   productController.registerProduct
 );
-
 router.get('/promo-products', productController.getPromoProducts);
-
 router.get('/viewed-products', productController.getMostViewedProducts);
-
 router.get('/purchased-products', productController.getMostPurchasedProducts);
-
 router.get('/product/:productId', productController.getProductInfo);
+router.post('/product/:productId', productController.increaseViews);
+
+// cart routes
+router.post(
+  '/cart',
+  authMiddlewares.validateToken,
+  productMiddlewares.validateProduct,
+  authMiddlewares.checkToken,
+  productMiddlewares.checkProduct,
+  cartController.addToCart
+);
+router.get('/cart', authMiddlewares.validateToken, authMiddlewares.checkToken);
 
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
-
 router.post(
   '/login',
   authMiddlewares.validateLogin,
