@@ -56,3 +56,17 @@ export const getMostPurchasedProducts = async (req, res) => {
     return res.status(500).send('Algo deu errado ao tentar buscar os produtos');
   }
 };
+
+export const getProductInfo = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const productInfo = await product.getProductById(productId);
+    if (!productInfo) {
+      return res.status(404).send('Produto não encontrado');
+    }
+    return res.json(productInfo);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Algo deu errado ao tentar buscar o produto');
+  }
+};

@@ -1,4 +1,5 @@
 import joi from 'joi';
+import { ObjectId } from 'mongodb';
 
 import { db } from './index.js';
 
@@ -20,4 +21,10 @@ export const getProducts = async function () {
   const allProducts = await db.collection(products).find({}).toArray();
 
   return allProducts;
+};
+
+export const getProductById = async function (id) {
+  const productId = new ObjectId(id);
+  const productInfo = await db.collection(products).findOne({ _id: productId });
+  return productInfo;
 };
