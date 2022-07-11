@@ -28,11 +28,11 @@ export const updateCart = async function (cart, product) {
   const cartFromDb = await db.collection(carts).findOne(cart);
   const idsOnCart = cartFromDb.products.map((p) => {
     const { _id: pId } = p;
-    return pId;
+    return pId.toString();
   });
   const { _id: productId } = product;
-  if (idsOnCart.includes(productId)) {
-    const existingProductIndex = idsOnCart.indexOf(productId);
+  if (idsOnCart.includes(productId.toString())) {
+    const existingProductIndex = idsOnCart.indexOf(productId.toString());
     cartFromDb.products[existingProductIndex].qtd += 1;
     await db
       .collection(carts)
