@@ -12,5 +12,21 @@ export const createCart = async function (cartDocument) {
 };
 
 export const updateCart = async function (cart, product) {
-  await db.collection(carts).updateOne(cart, { $push: { products: product } });
+  const cartFromDb = db.collection(carts).findOne(cart);
+  const idsOnCart = cartFromDb.products.map((p) => {
+    const { _id: pId } = p;
+    return pId;
+  });
+  const { _id: productId } = product;
+  if (idsOnCart.includes(productId)) {
+    const existingProductIndex = idsOnCart.indexOf(productId);
+    cartFromDb.products[existingProductIndex].qtd += 1;
+    await db
+      .collection(carts)
+      .updateOne(cart, { $set: { products: cartFromDb.products } });
+  } else {
+    await db
+      .collection(carts)
+      .updateOne(cart, { $push: { products: product } });
+  }
 };
