@@ -1,4 +1,4 @@
-import { cart } from "../models/index.js";
+import { cart } from '../models/index.js';
 
 export const deleteCart = async (req, res) => {
     const {userId} = res.locals
@@ -11,4 +11,4 @@ export const deleteCart = async (req, res) => {
     } catch (error) {
         res.status(500).send(error)
     }
-}
+};
