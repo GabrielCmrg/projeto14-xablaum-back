@@ -1,4 +1,4 @@
-import cart from '../models/index.js';
+import { cart } from '../models/index.js';
 
 export const addToCart = async (req, res) => {
   const { product, userId } = res.locals;

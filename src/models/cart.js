@@ -1,4 +1,4 @@
-import { db } from './index.sj';
+import { db } from './index.js';
 
 const carts = 'carts';
 

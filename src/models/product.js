@@ -37,6 +37,6 @@ export const getProduct = async function (product) {
 export const incrementViews = async function (productId) {
   const { matchedCount } = await db
     .collection(products)
-    .updateOne({ _id: productId }, { $inc: { views: 1 } });
+    .updateOne({ _id: new ObjectId(productId) }, { $inc: { views: 1 } });
   return matchedCount;
 };
