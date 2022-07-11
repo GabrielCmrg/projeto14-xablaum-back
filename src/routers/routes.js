@@ -24,7 +24,8 @@ router.get('/product/:productId', productController.getProductInfo);
 router.post(
   '/cart',
   cartMiddlewares.validateRequest,
-  authMiddlewares.checkToken
+  authMiddlewares.checkToken,
+  productMiddlewares.checkProduct
 );
 
 // authentication routes
