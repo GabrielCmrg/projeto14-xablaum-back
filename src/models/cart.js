@@ -1,6 +1,17 @@
+import { ObjectId } from 'mongodb';
 import { db } from './index.js';
 
 const carts = 'carts';
+
+export const getCartById = async function (id) {
+  const cart = await db.collection(carts).findOne({_id: new ObjectId(id)})
+  return cart;
+}
+
+export const deleteCartById = async function (id) {
+  const cart = await db.collection(carts).deleteOne({_id: new ObjectId(id)})
+  return cart;
+}
 
 export const getCartByUserId = async function (userId) {
   const cart = await db.collection(carts).findOne({ userId });
