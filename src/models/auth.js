@@ -54,3 +54,12 @@ export const loginSchema = joi.object({
   email: joi.string().email().trim().required(),
   password: joi.string().trim().required(),
 });
+
+export const headerSchema = joi
+  .object({
+    authorization: joi
+      .string()
+      .pattern(/^[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.?[a-zA-Z0-9_-.+/=]*$/)
+      .required(),
+  })
+  .unknown(true);
