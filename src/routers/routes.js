@@ -5,6 +5,7 @@ import {
   productController,
   authController,
   cartController,
+  checkoutController
 } from '../controllers/index.js';
 
 const router = express.Router();
@@ -31,6 +32,9 @@ router.post(
   cartController.addToCart
 );
 router.get('/cart', authMiddlewares.validateToken, authMiddlewares.checkToken);
+
+// checkout routes
+router.delete('/checkout/:cartId', authMiddlewares.validateToken, authMiddlewares.checkToken, checkoutController.deleteCart)
 
 // authentication routes
 router.post('/sign-up', authMiddlewares.validateSignUp, authController.signup);
