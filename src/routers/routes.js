@@ -40,7 +40,7 @@ router.get(
 
 // checkout routes
 router.delete(
-  '/checkout/:cartId',
+  '/checkout',
   authMiddlewares.validateToken,
   authMiddlewares.checkToken,
   checkoutController.deleteCart
