@@ -10,7 +10,7 @@ export const addToCart = async (req, res) => {
     if (!cartFromDb) {
       const cartDocument = {
         userId,
-        products: [product],
+        products: [{ ...product, qtd: 1 }],
       };
       await cart.createCart(cartDocument);
     } else {
